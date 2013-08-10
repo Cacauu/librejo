@@ -1,0 +1,8 @@
+{
+	"autoload": {
+        "psr-0": { "Librejo": "src" }
+    },
+    "require": {
+        "guzzle/http": "dev-master"
+    } 
+}

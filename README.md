@@ -15,6 +15,18 @@ Librejo is compatible with Tent 0.3 only, older versions of the Tent protocol ar
 ```curl -sS https://getcomposer.org/installer | php
 php composer.phar install --dev```
 
+**Require the autoloader in your php file**
+
+```require_once __DIR__.'/vendor/autoload.php'``
+
 As Librejo is still work in progress, there is no documentation or API reference, that is to be done once all the basic functions work as one would expect. 
+
+##To Do
+
+* Switch from CURL to Guzzle
+
+* Get Post
+
+* Post Post
 
 Librejo is released under BSD 3.0 license, see [LICENSE.txt](https://github.com/cacauu/librejo/blob/master/LICENSE.txt) for more information.

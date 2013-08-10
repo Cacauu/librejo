@@ -3,6 +3,6 @@
         "psr-0": { "Librejo": "src" }
     },
     "require": {
-        "guzzle/http": "dev-master"
+        "guzzle/guzzle": "dev-master"
     } 
 }

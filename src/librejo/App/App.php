@@ -24,9 +24,12 @@ class App {
 				'types' => $this->types,
 				'redirect_uri' => $this->redirect_uri,
 				),
-			'permissions' => array('public' => false),
+			'permissions' => array(
+				'public' => false
+			),
 		);
-		$app = json_encode($app);
+		$app = json_encode($app_array);
+		return $app;
 	}
 }
 ?>

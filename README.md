@@ -17,13 +17,15 @@ php composer.phar install --dev```
 
 **Require the autoloader in your php file**
 
-```require_once __DIR__.'/vendor/autoload.php'``
+```require_once __DIR__.'/vendor/autoload.php'```
 
-As Librejo is still work in progress, there is no documentation or API reference, that is to be done once all the basic functions work as one would expect. 
+As Librejo is still work in progress, there is no documentation or API reference, that is to be done once all the basic functions work as one would expect. For the meantime you can have a look at the [example directory](https://github.com/Cacauu/librejo/tree/master/examples) which contains example for most of the implemented features.
 
 ##To Do
 
-* Switch from CURL to Guzzle
+* Register Apps
+
+* Check Registration
 
 * Get Post
 

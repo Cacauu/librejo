@@ -32,7 +32,7 @@ var_export($client->profile());
 echo "<hr />";
 echo "<hr />";
 
-$app = new App(
+$app = new App($entity, 
 	'Librejo Client', 
 	'http://cacauu.de/librejo/client', 
 	array(

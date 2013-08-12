@@ -36,7 +36,7 @@ class Guzzle {
 		$link = str_replace('<', '', $link[0]);
 		$link = str_replace('>; rel="https://tent.io/rels/credentials"', "", $link);
 		$get = $client->get($link)->send();
-		$response = array('Link' => $link, 'App' => $response->json(), 'Credentials' => $get->json());
+		$response = array('App' => $response->json(), 'Credentials' => $get->json());
 		return $response;
 	}
 }

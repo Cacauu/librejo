@@ -23,9 +23,11 @@ As Librejo is still work in progress, there is no documentation or API reference
 
 ##To Do
 
-* Register Apps
+* OAuth
 
 * Check Registration
+
+* Get Posts
 
 * Get Post
 

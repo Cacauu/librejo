@@ -34,7 +34,10 @@ var_export($client->new_post_endpoint());
 echo "<hr/> Profile: ";
 var_export($client->profile());
 echo "<hr />";
+var_export($client->endpoints());
 echo "<hr />";
+
+$_SESSION['endpoints'] = $client->endpoints();
 
 $app = new App;
 $create_app = $app->new_app($entity, 
@@ -49,7 +52,7 @@ var_export($app->register());
 echo "<hr />";
 
 // This is the data that is used for all the other requests after registering the app
-// Save that somewhere
+// Save that somewhere (e.g. a database, a file, session etc.)
 // The Librejo Demo App uses sessions to store the data
 echo "<p>Client ID: ".$app->client_id()."</p>";
 $_SESSION['client_id'] = $app->client_id();

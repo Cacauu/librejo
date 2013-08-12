@@ -7,6 +7,7 @@ use Librejo\Client\GuzzleClient;
 class Client {
 
 	protected $meta;
+	protected $endpoints;
 	protected $new_post_endpoint;
 	protected $post_feed_endpoint;
 	protected $oauth_endpoint;
@@ -17,6 +18,7 @@ class Client {
 		$Guzzle = new GuzzleClient\Guzzle($entityUri);
 		$meta = $Guzzle->discover();
 		$this->meta = $meta;
+		$this->endpoints = $meta['post']['content']['servers'][0]['urls'];
 		$this->oauth_endpoint = $meta['post']['content']['servers'][0]['urls']['oauth_auth'];
 		$this->new_post_endpoint = $meta['post']['content']['servers'][0]['urls']['new_post'];
 		$this->post_feed_endpoint = $meta['post']['content']['servers'][0]['urls']['posts_feed'];
@@ -30,6 +32,10 @@ class Client {
 
 	public function profile() {
 		return $this->profile;
+	}
+
+	public function endpoints() {
+		return $this->endpoints;
 	}
 
 	public function oauth_endpoint() {

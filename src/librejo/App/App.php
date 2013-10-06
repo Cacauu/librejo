@@ -14,8 +14,10 @@ class App {
 	protected $hawk_id;
 	protected $hawk_key;
 	protected $meta;
+	protected $Guzzle;
 
 	public function __construct() {
+		$this->Guzzle = new GuzzleClient\Guzzle($this->entityUri);
 	}
 
 	public function new_app($entityUri, $name, $url, array $types, $redirect_uri) {
@@ -42,6 +44,7 @@ class App {
 				'types' => array(
 					'write' => array('https://tent.io/types/status/v0')
 				),
+				'scopes' => array('permissions'),
 				'redirect_uri' => $this->redirect_uri,
 				),
 			'permissions' => array(
@@ -74,11 +77,17 @@ class App {
 		return $this->hawk_key;
 	}
 
-	public function oauth($code, $app_id, $hawk_id, $hawk_key, $entity) {
+	public function oauth($code, $app_id, $hawk_id, $hawk_key, $entity, $endpoint) {
 		$meta = $this->meta;
 		$Guzzle = new GuzzleClient\Guzzle($this->entityUri);
-		$oauth = $Guzzle->oauth($code, $app_id, $hawk_id, $hawk_key, $entity);
+		$oauth = $Guzzle->oauth($code, $app_id, $hawk_id, $hawk_key, $entity, $endpoint);
 		return $oauth;
+	}
+
+	public function send_post($credentials, $post, $endpoint) {
+		$meta = $this->meta;
+		$post = $this->Guzzle->send_post($credentials, $post, $endpoint);
+		return $post;	
 	}
 }
 ?>

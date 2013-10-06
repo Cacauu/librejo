@@ -44,19 +44,40 @@ class Guzzle {
 		return $response;
 	}
 
-	public function oauth($code, $app_id, $hawk_id, $hawk_key, $entity) {
+	public function oauth($code, $app_id, $hawk_id, $hawk_key, $entity, $endpoint) {
 		$auth = new Auth;
-		$entity = str_replace("http://", "", $entity);
-		$entity = str_replace("https://", "", $entity);
-		$header = $auth->generate_header('hawk.1.header', 'POST', '/oauth/authorization', $entity, '80', $hawk_key, $hawk_id, $app_id);
+		if(isset(parse_url($endpoint)['port'])) {
+			$port = parse_url($endpoint)['port'];
+		}
+		else {
+			$port = 443;
+		}
+		$header = $auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $hawk_key, $hawk_id, $app_id);
 		$post = array('code' => $code, 'token_type' => 'https://tent.io/oauth/hawk-token');
 		$post = json_encode($post, JSON_UNESCAPED_SLASHES);
 		$client = $this->Guzzle;
-		$request = $client->post('http://1e7c6fc9b470.alpha.attic.is/oauth/authorization', array('Authorization' => $header), $post);
+		$request = $client->post($endpoint, array('Authorization' => $header, 'Content-Type' => 'application/json', 'Accept' => 'application/json'), $post);
 		$response = $request->send()->json();
 		$reponse = array('access_token' => $response['access_token'], 'hawk_key' => $response['hawk_key']);
 		unset($response['hawk_algorithm']);
 		unset($response['token_type']);
+		return $response;
+	}
+
+	public function send_post($credentials, $post, $endpoint) {
+		if(isset(parse_url($endpoint)['port'])) {
+			$port = parse_url($endpoint)['port'];
+		}
+		else {
+			$port = 443;
+		}
+		$type = $post['type'];
+		$post = json_encode($post, JSON_UNESCAPED_SLASHES);
+		$auth = new Auth;
+		$header = $auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $credentials['hawk_key'], $credentials['hawk_id'], $credentials['client_id']);
+		$client = $this->Guzzle;
+		$request = $client->post($endpoint, array('Authorization' => $header, 'Content-Type' => 'application/vnd.tent.post.v0+json; type="'.$type.'"', 'Accept' => 'application/json'), $post);
+		$response = $request->send()->json();
 		return $response;
 	}
 

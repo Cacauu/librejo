@@ -15,12 +15,14 @@ if (isset($_GET['error'])) {
 else {
 	echo "<p>Code: ".$_GET['code']."</p>";
 	$app = new App;
-	$oauth = $app->oauth($_GET['code'], $_SESSION['client_id'], $_SESSION['hawk_id'], $_SESSION['hawk_key'], $_SESSION['entity']);
+	$oauth = $app->oauth($_GET['code'], $_SESSION['client_id'], $_SESSION['hawk_id'], $_SESSION['hawk_key'], $_SESSION['entity'], $_SESSION['endpoints']['oauth_token']);
 	$_SESSION['hawk_key'] = $oauth['hawk_key'];
 	$_SESSION['access_token'] = $oauth['access_token'];
 	echo "<p>App ID: ".$_SESSION['client_id']."</p>";
 	echo "<p>Hawk ID: ".$_SESSION['hawk_id']."</p>";
 	echo "<p>Hawk Key: ".$_SESSION['hawk_key']."</p>";
-	echo "<p>Access Token: ".$_SESSION['access_token']."</p>";
-}
+	echo "<p>Access Token: ".$_SESSION['access_token']."</p>"; ?>
+	<p><a href="new_post.php">Create a new status</a></p>
+	<p><a href="read_posts.php">Read statuses</a></p>
+<?php }
 ?>

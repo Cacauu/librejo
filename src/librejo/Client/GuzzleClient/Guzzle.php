@@ -81,5 +81,20 @@ class Guzzle {
 		return $response;
 	}
 
+	public function get_posts($credentials, $type, $endpoint) {
+		if(isset(parse_url($endpoint)['port'])) {
+			$port = parse_url($endpoint)['port'];
+		}
+		else {
+			$port = 443;
+		}
+		$type = urlencode($type);
+		$auth = new Auth;
+		$header = $auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'].'?types='.$type, parse_url($endpoint)['host'], $port, $credentials['hawk_key'], $credentials['hawk_id'], $credentials['client_id']);
+		$client = $this->Guzzle;
+		$request = $client->get($endpoint.'?types='.$type, array('Authorization' => $header, 'Accept' => 'application/json'));
+		$response = $request->send()->json();
+		return $response;
+	}
 }
 ?>

@@ -89,5 +89,11 @@ class App {
 		$post = $this->Guzzle->send_post($credentials, $post, $endpoint);
 		return $post;	
 	}
+
+	public function get_posts($credentials, $type, $endpoint) {
+		$meta = $this->meta;
+		$posts = $this->Guzzle->get_posts($credentials, $type, $endpoint);
+		return $posts;
+	}
 }
 ?>

@@ -24,10 +24,14 @@ $status = array(
 	$app = new App;
 if(isset($_POST['text'])) {
 	$post = $app->send_post($credentials, $status, $_SESSION['endpoints']['new_post']);
-	unset($_POST['text']);
-	var_export($post);
-}
-else { ?>
+	unset($_POST['text']); 
+	if (!isset($post['error'])) { ?>
+		<p>Createad Status: <?php echo $post['post']['content']['text']; ?></p> 
+	<?php }
+	else { ?>
+		<p>Error: <?php echo $post['error']; ?></p>
+	<?php }
+} ?>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 		<label>Status: <textarea name="text"></textarea></label>
 		<p><input type="submit" value="Create status" /></p>
@@ -43,5 +47,3 @@ else { ?>
 			<?php }
 		?>
 	</div>
-<?php }
-?>

@@ -29,12 +29,11 @@ As Librejo is still work in progress, there is no documentation or API reference
 
 * Use [dflydev-hawk](https://github.com/dflydev/dflydev-hawk) for authentication part in requests
 
-* Check Registration
-
-* Get Posts
-
 * Get Post
 
-* Post Post
+##Apps
+
+Do you develop and app that uses Librejo to communicate with a Tent server? Create an issue and I will list it here.
+
 
 Librejo is released under BSD 3.0 license, see [LICENSE.txt](https://github.com/cacauu/librejo/blob/master/LICENSE.txt) for more information.

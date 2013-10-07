@@ -14,9 +14,7 @@ $credentials = array(
 	'hawk_id' => $_SESSION['hawk_id'],
 	'hawk_key' => $_SESSION['hawk_key']
 );
-if(isset($_POST['text'])) {
-	$credentials = array('client_id' => $_SESSION['client_id'], 'access_token' => $_SESSION['access_token'], 'hawk_key' => $_SESSION['hawk_key'], 'hawk_id' => $_SESSION['hawk_id'], 'entity' => $_SESSION['entity']);
-	$status = array(
+$status = array(
 		'type' => 'https://tent.io/types/status/v0#',
 		'content' => array(
 			'text' => $_POST['text'],
@@ -24,6 +22,7 @@ if(isset($_POST['text'])) {
 		'permissions' => array('public' => false),
 	);
 	$app = new App;
+if(isset($_POST['text'])) {
 	$post = $app->send_post($credentials, $status, $_SESSION['endpoints']['new_post']);
 	unset($_POST['text']);
 	var_export($post);
@@ -33,9 +32,16 @@ else { ?>
 		<label>Status: <textarea name="text"></textarea></label>
 		<p><input type="submit" value="Create status" /></p>
 	</form>
+	<?php
+		$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#', $_SESSION['endpoints']['posts_feed']);
+	?>
 	<h2>Your statuses:</h2>
 	<div id="status">
-		<p>You statuses will show up here later</p>
+		<?php
+			foreach ($statuses['posts'] as $status) { ?>
+				<p><?php echo $status['content']['text']; ?> - <?php echo $status['entity']; ?></p>
+			<?php }
+		?>
 	</div>
 <?php }
 ?>

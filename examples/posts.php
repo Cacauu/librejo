@@ -14,15 +14,15 @@ $credentials = array(
 	'hawk_id' => $_SESSION['hawk_id'],
 	'hawk_key' => $_SESSION['hawk_key']
 );
-$status = array(
+$app = new App;
+if(isset($_POST['text'])) {
+	$status = array(
 		'type' => 'https://tent.io/types/status/v0#',
 		'content' => array(
 			'text' => $_POST['text'],
 		),
 		'permissions' => array('public' => false),
 	);
-	$app = new App;
-if(isset($_POST['text'])) {
 	$post = $app->send_post($credentials, $status, $_SESSION['endpoints']['new_post']);
 	unset($_POST['text']); 
 	if (!isset($post['error'])) { ?>

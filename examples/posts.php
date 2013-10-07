@@ -14,7 +14,7 @@ $credentials = array(
 	'hawk_id' => $_SESSION['hawk_id'],
 	'hawk_key' => $_SESSION['hawk_key']
 );
-$app = new App;
+$app = new App($_SESSION['entity']);
 if(isset($_POST['text'])) {
 	$status = array(
 		'type' => 'https://tent.io/types/status/v0#',
@@ -23,7 +23,7 @@ if(isset($_POST['text'])) {
 		),
 		'permissions' => array('public' => false),
 	);
-	$post = $app->send_post($credentials, $status, $_SESSION['endpoints']['new_post']);
+	$post = $app->send_post($credentials, $status);
 	unset($_POST['text']); 
 	if (!isset($post['error'])) { ?>
 		<p>Createad Status: <?php echo $post['post']['content']['text']; ?></p> 
@@ -37,7 +37,8 @@ if(isset($_POST['text'])) {
 		<p><input type="submit" value="Create status" /></p>
 	</form>
 	<?php
-		$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#', $_SESSION['endpoints']['posts_feed']);
+		//$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#', $_SESSION['endpoints']['posts_feed']);
+		$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#');
 	?>
 	<h2>Your statuses:</h2>
 	<div id="status">

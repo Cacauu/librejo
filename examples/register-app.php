@@ -39,7 +39,7 @@ echo "<hr />";
 
 $_SESSION['endpoints'] = $client->endpoints();
 
-$app = new App;
+$app = new App($_GET['entity']);
 $create_app = $app->new_app($entity, 
 	'Librejo Client', 
 	'http://cacauu.de/librejo/client', 

@@ -15,9 +15,15 @@ class App {
 	protected $hawk_key;
 	protected $meta;
 	protected $Guzzle;
+	protected $client;
 
-	public function __construct() {
-		$this->Guzzle = new GuzzleClient\Guzzle($this->entityUri);
+	public function __construct($entityUri) {
+		$this->Guzzle = new GuzzleClient\Guzzle($entityUri);
+		$this->entityUri = $entityUri;
+		$client = new Client\Client;
+		$this->client = $client;
+		$meta = $client->discover($entityUri);
+		$this->meta = $meta;
 	}
 
 	public function new_app($entityUri, $name, $url, array $types, $redirect_uri) {
@@ -52,9 +58,8 @@ class App {
 			),
 		);
 		$app = json_encode($app_array, JSON_UNESCAPED_SLASHES); // JSON-encoding the app post
-		$client = new Client\Client;
-		$meta = $client->discover($this->entityUri);
-		$this->meta = $meta;
+		$meta = $this->meta;
+		$client = $this->client;
 		$register = new GuzzleClient\Guzzle($this->entityUri);
 		$post_app = $register->register_app($app, $client->new_post_endpoint());
 		$this->client_id = $post_app['App']['post']['id'];
@@ -77,22 +82,20 @@ class App {
 		return $this->hawk_key;
 	}
 
-	public function oauth($code, $app_id, $hawk_id, $hawk_key, $entity, $endpoint) {
+	public function oauth($code, $app_id, $hawk_id, $hawk_key, $entity) {
 		$meta = $this->meta;
 		$Guzzle = new GuzzleClient\Guzzle($this->entityUri);
-		$oauth = $Guzzle->oauth($code, $app_id, $hawk_id, $hawk_key, $entity, $endpoint);
+		$oauth = $Guzzle->oauth($code, $app_id, $hawk_id, $hawk_key, $entity, $this->meta['post']['content']['servers'][0]['urls']['oauth_token']);
 		return $oauth;
 	}
 
-	public function send_post($credentials, $post, $endpoint) {
-		$meta = $this->meta;
-		$post = $this->Guzzle->send_post($credentials, $post, $endpoint);
+	public function send_post($credentials, $post) {
+		$post = $this->Guzzle->send_post($credentials, $post, $this->meta['post']['content']['servers'][0]['urls']['new_post']);
 		return $post;	
 	}
 
-	public function get_posts($credentials, $type, $endpoint) {
-		$meta = $this->meta;
-		$posts = $this->Guzzle->get_posts($credentials, $type, $endpoint);
+	public function get_posts($credentials, $type) {
+		$posts = $this->Guzzle->get_posts($credentials, $type, $this->meta['post']['content']['servers'][0]['urls']['posts_feed']);
 		return $posts;
 	}
 }

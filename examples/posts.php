@@ -14,6 +14,7 @@ $credentials = array(
 	'hawk_id' => $_SESSION['hawk_id'],
 	'hawk_key' => $_SESSION['hawk_key']
 );
+
 $app = new App($_SESSION['entity']);
 if(isset($_POST['text'])) {
 	$status = array(
@@ -32,14 +33,12 @@ if(isset($_POST['text'])) {
 		<p>Error: <?php echo $post['error']; ?></p>
 	<?php }
 } ?>
+
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 		<label>Status: <textarea name="text"></textarea></label>
 		<p><input type="submit" value="Create status" /></p>
 	</form>
-	<?php
-		//$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#', $_SESSION['endpoints']['posts_feed']);
-		$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#');
-	?>
+
 	<h2>Profile:</h2>
 	<?php
 		$profile = $app->get_profile($_SESSION['entity']); ?>
@@ -48,13 +47,15 @@ if(isset($_POST['text'])) {
 		<p>Location: <?php echo $profile['location']; ?></p>
 		<p>Bio: <?php echo $profile['bio']; ?></p>
 		<p>Website: <?php echo $profile['website']; ?></p>
+		
 	<h2>Your statuses:</h2>
 	<div id="status">
 		<?php
+			$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#');
 			foreach ($statuses['posts'] as $status) { ?>
 				<p><?php echo $status['content']['text']; ?> - <?php echo $status['entity']; ?></p>
-			<?php }
-		?>
+			<?php } ?>
+
 	<h2>Single Post:</h2>
 		<?php
 		$status = $app->get_single_post($credentials, '9KV3fqegxNP65oFgrE3U4A', 'https://cacauu.cupcake.is'); 

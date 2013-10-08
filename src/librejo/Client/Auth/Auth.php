@@ -32,4 +32,3 @@ class Auth {
 		return $this->data;
 	}
 }
-?>

@@ -50,5 +50,3 @@ class Client {
 		return $this->new_post_endpoint;
 	}
 }
-
-?>

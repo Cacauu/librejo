@@ -112,4 +112,3 @@ class App {
 		return $profile;
 	}
 }
-?>

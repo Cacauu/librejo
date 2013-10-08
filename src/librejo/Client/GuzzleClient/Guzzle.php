@@ -47,14 +47,13 @@ class Guzzle {
 	}
 
 	public function oauth($code, $app_id, $hawk_id, $hawk_key, $entity, $endpoint) {
-		$auth = new Auth;
 		if(isset(parse_url($endpoint)['port'])) {
 			$port = parse_url($endpoint)['port'];
 		}
 		else {
 			$port = 443;
 		}
-		$header = $auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $hawk_key, $hawk_id, $app_id);
+		$header = $this->auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $hawk_key, $hawk_id, $app_id);
 		$post = array('code' => $code, 'token_type' => 'https://tent.io/oauth/hawk-token');
 		$post = json_encode($post, JSON_UNESCAPED_SLASHES);
 		$client = $this->Guzzle;
@@ -75,8 +74,7 @@ class Guzzle {
 		}
 		$type = $post['type'];
 		$post = json_encode($post, JSON_UNESCAPED_SLASHES);
-		$auth = new Auth;
-		$header = $auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $credentials['hawk_key'], $credentials['hawk_id'], $credentials['client_id']);
+		$header = $this->auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $credentials['hawk_key'], $credentials['hawk_id'], $credentials['client_id']);
 		$client = $this->Guzzle;
 		$request = $client->post($endpoint, array('Authorization' => $header, 'Content-Type' => 'application/vnd.tent.post.v0+json; type="'.$type.'"', 'Accept' => 'application/json'), $post);
 		$response = $request->send()->json();

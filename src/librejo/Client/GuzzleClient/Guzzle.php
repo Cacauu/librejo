@@ -46,12 +46,7 @@ class Guzzle {
 	}
 
 	public function oauth($code, $endpoint) {
-		if(isset(parse_url($endpoint)['port'])) {
-			$port = parse_url($endpoint)['port'];
-		}
-		else {
-			$port = 443;
-		}
+		$port = $this->get_port($endpoint);
 		$header = $this->auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
 		$post = array('code' => $code, 'token_type' => 'https://tent.io/oauth/hawk-token');
 		$post = json_encode($post, JSON_UNESCAPED_SLASHES);
@@ -65,12 +60,7 @@ class Guzzle {
 	}
 
 	public function send_post($post, $endpoint) {
-		if(isset(parse_url($endpoint)['port'])) {
-			$port = parse_url($endpoint)['port'];
-		}
-		else {
-			$port = 443;
-		}
+		$port = $this->get_port($endpoint);
 		$type = $post['type'];
 		$post = json_encode($post, JSON_UNESCAPED_SLASHES);
 		$header = $this->auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
@@ -81,12 +71,7 @@ class Guzzle {
 	}
 
 	public function get_posts($type, $endpoint) {
-		if(isset(parse_url($endpoint)['port'])) {
-			$port = parse_url($endpoint)['port'];
-		}
-		else {
-			$port = 443;
-		}
+		$port = $this->get_port($endpoint);
 		$type = urlencode($type);
 		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'].'?types='.$type, parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
 		$client = $this->Guzzle;
@@ -96,12 +81,7 @@ class Guzzle {
 	}
 
 	public function get_single_post($id, $entity, $endpoint) {
-		if(isset(parse_url($endpoint)['port'])) {
-			$port = parse_url($endpoint)['port'];
-		}
-		else {
-			$port = 443;
-		}
+		$port = $this->get_port($endpoint);
 		$endpoint = str_replace("{entity}", urlencode($entity), $endpoint);
 		$endpoint = str_replace("{post}", $id, $endpoint);
 		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
@@ -111,12 +91,7 @@ class Guzzle {
 	}
 
 	public function delete_post($id, $entity, $endpoint) {
-		if(isset(parse_url($endpoint)['port'])) {
-			$port = parse_url($endpoint)['port'];
-		}
-		else {
-			$port = 443;
-		}
+		$port = $this->get_port($endpoint);
 		$endpoint = str_replace("{entity}", urlencode($entity), $endpoint);
 		$endpoint = str_replace("{post}", $id, $endpoint);
 		$header = $this->auth->generate_header('hawk.1.header', 'DELETE', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
@@ -141,5 +116,15 @@ class Guzzle {
 		}
 		$profile['avatar'] = $entity.$location;
 		return $profile;
+	}
+
+	public function get_port($url) {
+		if(isset(parse_url($url)['port'])) {
+			$port = parse_url($url)['port'];
+		}
+		else {
+			$port = 443;
+		}
+		return $port;
 	}
 }

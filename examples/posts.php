@@ -47,4 +47,12 @@ if(isset($_POST['text'])) {
 				<p><?php echo $status['content']['text']; ?> - <?php echo $status['entity']; ?></p>
 			<?php }
 		?>
+	<h2>Single Post:</h2>
+		<?php
+		$status = $app->get_single_post($credentials, '9KV3fqegxNP65oFgrE3U4A', 'https://cacauu.cupcake.is'); 
+		if (!isset($status['error'])) { ?>
+			<p><?php echo $status['post']['content']['text']; ?></p>
+		<?php }
+		?>
+		
 	</div>

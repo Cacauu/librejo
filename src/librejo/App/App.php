@@ -108,5 +108,10 @@ class App {
 		$delete = $this->Guzzle->delete_post($credentials, $id, $_SESSION['entity'], $this->meta['post']['content']['servers'][0]['urls']['post']);
 		return $delete;
 	}
+
+	public function get_profile($entity) {
+		$profile = $this->Guzzle->get_profile($entity);
+		return $profile;
+	}
 }
 ?>

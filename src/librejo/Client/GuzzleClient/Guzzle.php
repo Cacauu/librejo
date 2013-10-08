@@ -122,5 +122,23 @@ class Guzzle {
 		$response = $request->send()->json();
 		return $response;
 	}
+
+	public function get_profile($entity) {
+		$meta = $this->discover($entity);
+		$profile = $meta['post']['content']['profile'];
+		$endpoint = $meta['post']['content']['servers'][0]['urls']['post_attachment'];
+		$endpoint = str_replace("{entity}", urlencode($entity), $endpoint);
+		$endpoint = str_replace("{post}", "meta", $endpoint);
+		$endpoint = str_replace("{name}", $meta['post']['attachments'][0]['name'], $endpoint);
+		$headers = get_headers($endpoint);
+		foreach ($headers as $header) {
+			if (preg_match("/Location:.*/", $header)) {
+                $location = $header;
+                $location = str_replace("Location: ", "", $location);
+            }
+		}
+		$profile['avatar'] = $entity.$location;
+		return $profile;
+	}
 }
 ?>

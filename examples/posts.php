@@ -40,6 +40,14 @@ if(isset($_POST['text'])) {
 		//$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#', $_SESSION['endpoints']['posts_feed']);
 		$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#');
 	?>
+	<h2>Profile:</h2>
+	<?php
+		$profile = $app->get_profile($_SESSION['entity']); ?>
+		<img src="<?php echo $profile['avatar']; ?>" style="border-radius:10px; float:right; width:200px; height:200px;">
+		<p>Name: <?php echo $profile['name']; ?></p>
+		<p>Location: <?php echo $profile['location']; ?></p>
+		<p>Bio: <?php echo $profile['bio']; ?></p>
+		<p>Website: <?php echo $profile['website']; ?></p>
 	<h2>Your statuses:</h2>
 	<div id="status">
 		<?php

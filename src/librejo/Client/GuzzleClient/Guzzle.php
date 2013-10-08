@@ -33,8 +33,7 @@ class Guzzle {
 	}
 
 	public function register_app($app, $post_endpoint) {
-		$client = $this->Guzzle;
-		$request = $client->post($post_endpoint, array('Content-Type' => 'application/vnd.tent.post.v0+json; type="https://tent.io/types/app/v0#"'), $app);
+		$request = $this->Guzzle->post($post_endpoint, array('Content-Type' => 'application/vnd.tent.post.v0+json; type="https://tent.io/types/app/v0#"'), $app);
 		$response = $request->send();
 		$link = $response->getHeader('link')->raw();
 		$link = str_replace('<', '', $link[0]);
@@ -107,6 +106,21 @@ class Guzzle {
 		$endpoint = str_replace("{post}", $id, $endpoint);
 		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $credentials['hawk_key'], $credentials['hawk_id'], $credentials['client_id']);
 		$request = $this->Guzzle->get($endpoint, array('Authorization' => $header, 'Accept' => 'application/vnd.tent.post.v0+json'));
+		$response = $request->send()->json();
+		return $response;
+	}
+
+	public function delete_post($credentials, $id, $entity, $endpoint) {
+		if(isset(parse_url($endpoint)['port'])) {
+			$port = parse_url($endpoint)['port'];
+		}
+		else {
+			$port = 443;
+		}
+		$endpoint = str_replace("{entity}", urlencode($entity), $endpoint);
+		$endpoint = str_replace("{post}", $id, $endpoint);
+		$header = $this->auth->generate_header('hawk.1.header', 'DELETE', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $credentials['hawk_key'], $credentials['hawk_id'], $credentials['client_id']);
+		$request = $this->Guzzle->delete($endpoint, array('Authorization' => $header, 'Content-Type' => 'application/vnd.tent.post.v0+json;'));
 		$response = $request->send()->json();
 		return $response;
 	}

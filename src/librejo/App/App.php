@@ -100,8 +100,13 @@ class App {
 	}
 
 	public function get_single_post($credentials, $id, $entity) {
-		$posts = $this->Guzzle->get_single_post($credentials, $id, $entity, $this->meta['post']['content']['servers'][0]['urls']['post']);
-		return $posts;
+		$post = $this->Guzzle->get_single_post($credentials, $id, $entity, $this->meta['post']['content']['servers'][0]['urls']['post']);
+		return $post;
+	}
+
+	public function delete_post($credentials, $id) {
+		$delete = $this->Guzzle->delete_post($credentials, $id, $_SESSION['entity'], $this->meta['post']['content']['servers'][0]['urls']['post']);
+		return $delete;
 	}
 }
 ?>

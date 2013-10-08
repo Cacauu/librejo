@@ -15,7 +15,7 @@ $credentials = array(
 	'hawk_key' => $_SESSION['hawk_key']
 );
 
-$app = new App($_SESSION['entity']);
+$app = new App($_SESSION['entity'], $credentials);
 if(isset($_POST['text'])) {
 	$status = array(
 		'type' => 'https://tent.io/types/status/v0#',
@@ -24,7 +24,7 @@ if(isset($_POST['text'])) {
 		),
 		'permissions' => array('public' => false),
 	);
-	$post = $app->send_post($credentials, $status);
+	$post = $app->send_post($status);
 	unset($_POST['text']); 
 	if (!isset($post['error'])) { ?>
 		<p>Createad Status: <?php echo $post['post']['content']['text']; ?> | <a href="delete.php?id=<?php echo $post['post']['id']; ?>">Delete post</a></p> 
@@ -47,18 +47,18 @@ if(isset($_POST['text'])) {
 		<p>Location: <?php echo $profile['location']; ?></p>
 		<p>Bio: <?php echo $profile['bio']; ?></p>
 		<p>Website: <?php echo $profile['website']; ?></p>
-		
+
 	<h2>Your statuses:</h2>
 	<div id="status">
 		<?php
-			$statuses = $app->get_posts($credentials, 'https://tent.io/types/status/v0#');
+			$statuses = $app->get_posts('https://tent.io/types/status/v0#');
 			foreach ($statuses['posts'] as $status) { ?>
 				<p><?php echo $status['content']['text']; ?> - <?php echo $status['entity']; ?></p>
 			<?php } ?>
 
 	<h2>Single Post:</h2>
 		<?php
-		$status = $app->get_single_post($credentials, '9KV3fqegxNP65oFgrE3U4A', 'https://cacauu.cupcake.is'); 
+		$status = $app->get_single_post('9KV3fqegxNP65oFgrE3U4A', 'https://cacauu.cupcake.is'); 
 		if (!isset($status['error'])) { ?>
 			<p><?php echo $status['post']['content']['text']; ?></p>
 		<?php }

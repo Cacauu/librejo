@@ -14,8 +14,8 @@ $credentials = array(
 	'hawk_id' => $_SESSION['hawk_id'],
 	'hawk_key' => $_SESSION['hawk_key']
 );
-$app = new App($_SESSION['entity']);
-$delete = $app->delete_post($credentials, $_GET['id']);
+$app = new App($_SESSION['entity'], $credentials);
+$delete = $app->delete_post($_GET['id']);
 var_export($delete);
 if (!isset($delete['error'])) { ?>
 	<p>Successfully deleted!</p>

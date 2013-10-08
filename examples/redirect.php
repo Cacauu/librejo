@@ -13,9 +13,15 @@ if (isset($_GET['error'])) {
 	echo "<p>Error: ".$_GET['error']."</p>";
 }
 else {
+	$credentials = array(
+		'entity' => $_SESSION['entity'], 
+		'client_id' => $_SESSION['client_id'],
+		'hawk_id' => $_SESSION['hawk_id'],
+		'hawk_key' => $_SESSION['hawk_key']
+	);
 	echo "<p>Code: ".$_GET['code']."</p>";
-	$app = new App($_SESSION['entity']);
-	$oauth = $app->oauth($_GET['code'], $_SESSION['client_id'], $_SESSION['hawk_id'], $_SESSION['hawk_key'], $_SESSION['entity'], $_SESSION['endpoints']['oauth_token']);
+	$app = new App($_SESSION['entity'], $credentials);
+	$oauth = $app->oauth($_GET['code'], $credentials, $_SESSION['endpoints']['oauth_token']);
 	$_SESSION['hawk_key'] = $oauth['hawk_key'];
 	$_SESSION['access_token'] = $oauth['access_token'];
 	$_SESSION['hawk_id'] = $oauth['access_token'];

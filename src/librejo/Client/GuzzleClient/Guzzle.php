@@ -25,8 +25,7 @@ class Guzzle {
 		$header = $client->head()->send();
 		$header = $header->getHeader('link')->raw();
 		$link = $header[0];
-		$link = str_replace('<', '', $link);
-		$link = str_replace('>; rel="https://tent.io/rels/meta-post"', "", $link);
+		$link = preg_replace('/<(.*)>.*/', '$1', $link);
 		$meta = $client->get($link)->send();
 		$meta = $meta->json();
 		return $meta;
@@ -36,8 +35,7 @@ class Guzzle {
 		$request = $this->Guzzle->post($post_endpoint, array('Content-Type' => 'application/vnd.tent.post.v0+json; type="https://tent.io/types/app/v0#"'), $app);
 		$response = $request->send();
 		$link = $response->getHeader('link')->raw();
-		$link = str_replace('<', '', $link[0]);
-		$link = str_replace('>; rel="https://tent.io/rels/credentials"', "", $link);
+		$link = preg_replace('/<(.*)>.*/', '$1', $link);
 		$get = $this->Guzzle->get($link)->send();
 		$response = array('App' => $response->json(), 'Credentials' => $get->json());
 		$this->app_id = $response['App']['post']['id'];

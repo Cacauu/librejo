@@ -98,5 +98,10 @@ class App {
 		$posts = $this->Guzzle->get_posts($credentials, $type, $this->meta['post']['content']['servers'][0]['urls']['posts_feed']);
 		return $posts;
 	}
+
+	public function get_single_post($credentials, $id, $entity) {
+		$posts = $this->Guzzle->get_single_post($credentials, $id, $entity, $this->meta['post']['content']['servers'][0]['urls']['post']);
+		return $posts;
+	}
 }
 ?>

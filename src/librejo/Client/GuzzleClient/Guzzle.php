@@ -8,12 +8,14 @@ class Guzzle {
 	protected $Guzzle;
 	protected $entityUri;
 	protected $app_id;
+	protected $auth;
 
 	// Creating a new Guzzle client
 	// Called with new GuzzleClient\Guzzle($entityUri)
 	public function __construct($entityUri) {
 		$this->Guzzle = new \Guzzle\Http\Client($entityUri);
 		$this->entityUri = $entityUri;
+		$this->auth = new Auth;
 	}
 
 	// Returns the meta post of an entity
@@ -89,10 +91,24 @@ class Guzzle {
 			$port = 443;
 		}
 		$type = urlencode($type);
-		$auth = new Auth;
-		$header = $auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'].'?types='.$type, parse_url($endpoint)['host'], $port, $credentials['hawk_key'], $credentials['hawk_id'], $credentials['client_id']);
+		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'].'?types='.$type, parse_url($endpoint)['host'], $port, $credentials['hawk_key'], $credentials['hawk_id'], $credentials['client_id']);
 		$client = $this->Guzzle;
 		$request = $client->get($endpoint.'?types='.$type, array('Authorization' => $header, 'Accept' => 'application/json'));
+		$response = $request->send()->json();
+		return $response;
+	}
+
+	public function get_single_post($credentials, $id, $entity, $endpoint) {
+		if(isset(parse_url($endpoint)['port'])) {
+			$port = parse_url($endpoint)['port'];
+		}
+		else {
+			$port = 443;
+		}
+		$endpoint = str_replace("{entity}", urlencode($entity), $endpoint);
+		$endpoint = str_replace("{post}", $id, $endpoint);
+		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $credentials['hawk_key'], $credentials['hawk_id'], $credentials['client_id']);
+		$request = $this->Guzzle->get($endpoint, array('Authorization' => $header, 'Accept' => 'application/vnd.tent.post.v0+json'));
 		$response = $request->send()->json();
 		return $response;
 	}

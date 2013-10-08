@@ -26,7 +26,7 @@ if(isset($_POST['text'])) {
 	$post = $app->send_post($credentials, $status);
 	unset($_POST['text']); 
 	if (!isset($post['error'])) { ?>
-		<p>Createad Status: <?php echo $post['post']['content']['text']; ?></p> 
+		<p>Createad Status: <?php echo $post['post']['content']['text']; ?> | <a href="delete.php?id=<?php echo $post['post']['id']; ?>">Delete post</a></p> 
 	<?php }
 	else { ?>
 		<p>Error: <?php echo $post['error']; ?></p>

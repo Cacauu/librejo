@@ -34,8 +34,6 @@ As Librejo is still work in progress, there is no documentation or API reference
 
 * Update Post
 
-* Delete Post
-
 ##Apps
 
 Do you develop and app that uses Librejo to communicate with a Tent server? Create an issue and I will list it here.

@@ -15,7 +15,7 @@ class Client {
 
 	//Function returning the meta post of an entity
 	public function discover($entityUri) {
-		$Guzzle = new GuzzleClient\Guzzle($entityUri);
+		$Guzzle = new GuzzleClient\Guzzle($entityUri, array());
 		$meta = $Guzzle->discover();
 		$this->meta = $meta;
 		$this->endpoints = $meta['post']['content']['servers'][0]['urls'];

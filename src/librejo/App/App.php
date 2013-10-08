@@ -17,8 +17,8 @@ class App {
 	protected $Guzzle;
 	protected $client;
 
-	public function __construct($entityUri) {
-		$this->Guzzle = new GuzzleClient\Guzzle($entityUri);
+	public function __construct($entityUri, $credentials) {
+		$this->Guzzle = new GuzzleClient\Guzzle($entityUri, $credentials);
 		$this->entityUri = $entityUri;
 		$client = new Client\Client;
 		$this->client = $client;
@@ -60,7 +60,7 @@ class App {
 		$app = json_encode($app_array, JSON_UNESCAPED_SLASHES); // JSON-encoding the app post
 		$meta = $this->meta;
 		$client = $this->client;
-		$register = new GuzzleClient\Guzzle($this->entityUri);
+		$register = $this->Guzzle;
 		$post_app = $register->register_app($app, $client->new_post_endpoint());
 		$this->client_id = $post_app['App']['post']['id'];
 		$this->hawk_id = $post_app['Credentials']['post']['id'];
@@ -82,30 +82,28 @@ class App {
 		return $this->hawk_key;
 	}
 
-	public function oauth($code, $app_id, $hawk_id, $hawk_key, $entity) {
-		$meta = $this->meta;
-		$Guzzle = new GuzzleClient\Guzzle($this->entityUri);
-		$oauth = $Guzzle->oauth($code, $app_id, $hawk_id, $hawk_key, $entity, $this->meta['post']['content']['servers'][0]['urls']['oauth_token']);
+	public function oauth($code) {
+		$oauth = $this->Guzzle->oauth($code, $this->meta['post']['content']['servers'][0]['urls']['oauth_token']);
 		return $oauth;
 	}
 
-	public function send_post($credentials, $post) {
-		$post = $this->Guzzle->send_post($credentials, $post, $this->meta['post']['content']['servers'][0]['urls']['new_post']);
+	public function send_post($post) {
+		$post = $this->Guzzle->send_post($post, $this->meta['post']['content']['servers'][0]['urls']['new_post']);
 		return $post;	
 	}
 
-	public function get_posts($credentials, $type) {
-		$posts = $this->Guzzle->get_posts($credentials, $type, $this->meta['post']['content']['servers'][0]['urls']['posts_feed']);
+	public function get_posts($type) {
+		$posts = $this->Guzzle->get_posts($type, $this->meta['post']['content']['servers'][0]['urls']['posts_feed']);
 		return $posts;
 	}
 
-	public function get_single_post($credentials, $id, $entity) {
-		$post = $this->Guzzle->get_single_post($credentials, $id, $entity, $this->meta['post']['content']['servers'][0]['urls']['post']);
+	public function get_single_post($id, $entity) {
+		$post = $this->Guzzle->get_single_post($id, $entity, $this->meta['post']['content']['servers'][0]['urls']['post']);
 		return $post;
 	}
 
-	public function delete_post($credentials, $id) {
-		$delete = $this->Guzzle->delete_post($credentials, $id, $_SESSION['entity'], $this->meta['post']['content']['servers'][0]['urls']['post']);
+	public function delete_post($id) {
+		$delete = $this->Guzzle->delete_post($id, $_SESSION['entity'], $this->meta['post']['content']['servers'][0]['urls']['post']);
 		return $delete;
 	}
 

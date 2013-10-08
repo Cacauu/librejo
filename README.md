@@ -12,8 +12,9 @@ Librejo is compatible with Tent 0.3 only, older versions of the Tent protocol ar
 
 **If you need Composer:**
 
-```curl -sS https://getcomposer.org/installer | php
-php composer.phar install --dev```
+```curl -sS https://getcomposer.org/installer | php```
+
+```php composer.phar install --dev```
 
 **Require the autoloader in your php file**
 
@@ -29,7 +30,11 @@ As Librejo is still work in progress, there is no documentation or API reference
 
 * Use [dflydev-hawk](https://github.com/dflydev/dflydev-hawk) for authentication part in requests
 
-* Get Post
+* Get Profile
+
+* Update Post
+
+* Delete Post
 
 ##Apps
 

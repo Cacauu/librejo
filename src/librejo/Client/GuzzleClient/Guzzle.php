@@ -38,7 +38,7 @@ class Guzzle {
 		$link = $response->getHeader('link')->raw();
 		$link = str_replace('<', '', $link[0]);
 		$link = str_replace('>; rel="https://tent.io/rels/credentials"', "", $link);
-		$get = $client->get($link)->send();
+		$get = $this->Guzzle->get($link)->send();
 		$response = array('App' => $response->json(), 'Credentials' => $get->json());
 		$this->app_id = $response['App']['post']['id'];
 		$this->hawk_key = $response['Credentials']['post']['content']['hawk_key'];

@@ -27,12 +27,39 @@ if(isset($_POST['text'])) {
 	$post = $app->send_post($status);
 	unset($_POST['text']); 
 	if (!isset($post['error'])) { ?>
-		<p>Createad Status: <?php echo $post['post']['content']['text']; ?> | <a href="delete.php?id=<?php echo $post['post']['id']; ?>">Delete post</a></p> 
+		<p>Createad Status: <?php echo $post['post']['content']['text']; ?> | <a href="delete.php?id=<?php echo $post['post']['id']; ?>">Delete post</a> <a href="posts.php?update=<?php echo $post['post']['id']; ?>">Update post</a></p> 
 	<?php }
 	else { ?>
 		<p>Error: <?php echo $post['error']; ?></p>
 	<?php }
-} ?>
+} 
+elseif (isset($_GET['update'])) {
+		$status = $app->get_single_post($_GET['update'], $_SESSION['entity']); ?>
+		<h2>Update Post:</h2>
+		<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>?send_update=<?php echo $status['post']['id']; ?>&version=<?php echo $status['post']['version']['id']; ?>">
+			<textarea name="update"><?php echo $status['post']['content']['text']; ?></textarea>
+			<input type="submit" value="Update post">
+		</form>
+<?php }
+elseif (isset($_GET['send_update'])) {
+	$new_post = array(
+		'type' => 'https://tent.io/types/status/v0#',
+		'content' => array(
+			'text' => $_POST['update'],
+		),
+		'version' => array(
+			'parents' => array(
+				array('version' => $_GET['version']),
+			),
+		),
+		'permissions' => array('public' => false),
+	);
+	$update = $app->update_post($_GET['send_update'], $_SESSION['entity'], $new_post);
+	if (!isset($update['error'])) {
+		echo "<p>Updated ".$_GET['send_update']."!</p>";
+	}
+}
+?>
 
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 		<label>Status: <textarea name="text"></textarea></label>

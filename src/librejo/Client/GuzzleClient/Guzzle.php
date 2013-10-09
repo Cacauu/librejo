@@ -118,6 +118,19 @@ class Guzzle {
 		return $profile;
 	}
 
+	public function update_post($id, $entity, $new_post, $endpoint) {
+		$endpoint = str_replace("{entity}", urlencode($entity), $endpoint);
+		$endpoint = str_replace("{post}", $id, $endpoint);
+		$port = $this->get_port($endpoint);
+		$type = $new_post['type'];
+		$new_post = json_encode($new_post, JSON_UNESCAPED_SLASHES);
+		$header = $this->auth->generate_header('hawk.1.header', 'PUT', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
+		$request = $this->Guzzle->put($endpoint, array('Authorization' => $header, 'Content-Type' => 'application/vnd.tent.post.v0+json; type="'.$type.'"'), $new_post);
+		$response = $request->send();
+		return $response;
+	}
+
+
 	public function get_port($url) {
 		if(isset(parse_url($url)['port'])) {
 			$port = parse_url($url)['port'];

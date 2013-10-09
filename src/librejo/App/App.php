@@ -111,4 +111,8 @@ class App {
 		$profile = $this->Guzzle->get_profile($entity);
 		return $profile;
 	}
+
+	public function update_post($id, $entity, $new_post) {
+		$updated = $this->Guzzle->update_post($id, $entity, $new_post, $this->meta['post']['content']['servers'][0]['urls']['post']);
+	}
 }

@@ -22,7 +22,7 @@ if(isset($_POST['text'])) {
 		'content' => array(
 			'text' => $_POST['text'],
 		),
-		'permissions' => array('public' => true),
+		'permissions' => array('public' => false),
 	);
 	$post = $app->send_post($status);
 	unset($_POST['text']); 
@@ -52,7 +52,7 @@ elseif (isset($_GET['send_update'])) {
 				array('version' => $_GET['version']),
 			),
 		),
-		'permissions' => array('public' => true),
+		'permissions' => array('public' => false),
 	);
 	$update = $app->update_post($_GET['send_update'], $_SESSION['entity'], $new_post);
 	if (!isset($update['error'])) {

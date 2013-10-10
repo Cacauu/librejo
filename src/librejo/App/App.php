@@ -69,27 +69,27 @@ class App {
 	}
 
 	public function oauth($code) {
-		$oauth = $this->Guzzle->oauth($code, $this->meta['post']['content']['servers'][0]['urls']['oauth_token']);
+		$oauth = $this->Guzzle->oauth($code);
 		return $oauth;
 	}
 
 	public function send_post($post) {
-		$post = $this->Guzzle->send_post($post, $this->meta['post']['content']['servers'][0]['urls']['new_post']);
+		$post = $this->Guzzle->send_post($post);
 		return $post;	
 	}
 
 	public function get_posts($type) {
-		$posts = $this->Guzzle->get_posts($type, $this->meta['post']['content']['servers'][0]['urls']['posts_feed']);
+		$posts = $this->Guzzle->get_posts($type);
 		return $posts;
 	}
 
 	public function get_single_post($id, $entity) {
-		$post = $this->Guzzle->get_single_post($id, $entity, $this->meta['post']['content']['servers'][0]['urls']['post']);
+		$post = $this->Guzzle->get_single_post($id, $entity);
 		return $post;
 	}
 
 	public function delete_post($id) {
-		$delete = $this->Guzzle->delete_post($id, $_SESSION['entity'], $this->meta['post']['content']['servers'][0]['urls']['post']);
+		$delete = $this->Guzzle->delete_post($id, $_SESSION['entity']);
 		return $delete;
 	}
 
@@ -99,6 +99,6 @@ class App {
 	}
 
 	public function update_post($id, $entity, $new_post) {
-		$updated = $this->Guzzle->update_post($id, $entity, $new_post, $this->meta['post']['content']['servers'][0]['urls']['post']);
+		$updated = $this->Guzzle->update_post($id, $entity, $new_post);
 	}
 }

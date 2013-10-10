@@ -10,6 +10,7 @@ class Guzzle {
 	protected $app_id;
 	protected $auth;
 	protected $credentials;
+	protected $endpoints;
 
 	// Creating a new Guzzle client
 	// Called with new GuzzleClient\Guzzle($entityUri)
@@ -18,6 +19,8 @@ class Guzzle {
 		$this->entityUri = $entityUri;
 		$this->credentials = $credentials;
 		$this->auth = new Auth;
+		$meta = $this->discover($entityUri);
+		$this->endpoints = $meta['post']['content']['servers'][0]['urls'];
 	}
 
 	// Returns the meta post of an entity
@@ -57,7 +60,8 @@ class Guzzle {
 		return $response;
 	}
 
-	public function oauth($code, $endpoint) {
+	public function oauth($code) {
+		$endpoint = $this->endpoints['oauth_token'];
 		$port = $this->get_port($endpoint);
 		$header = $this->auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
 		$post = array('code' => $code, 'token_type' => 'https://tent.io/oauth/hawk-token');
@@ -71,7 +75,8 @@ class Guzzle {
 		return $response;
 	}
 
-	public function send_post($post, $endpoint) {
+	public function send_post($post) {
+		$endpoint = $this->endpoints['new_post'];
 		$port = $this->get_port($endpoint);
 		$type = $post['type'];
 		$post = json_encode($post, JSON_UNESCAPED_SLASHES);
@@ -82,7 +87,8 @@ class Guzzle {
 		return $response;
 	}
 
-	public function get_posts($type, $endpoint) {
+	public function get_posts($type) {
+		$endpoint = $this->endpoints['posts_feed'];
 		$port = $this->get_port($endpoint);
 		$type = urlencode($type);
 		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'].'?types='.$type, parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
@@ -92,7 +98,8 @@ class Guzzle {
 		return $response;
 	}
 
-	public function get_single_post($id, $entity, $endpoint) {
+	public function get_single_post($id, $entity) {
+		$endpoint = $this->endpoints['post'];
 		$port = $this->get_port($endpoint);
 		$endpoint = str_replace("{entity}", urlencode($entity), $endpoint);
 		$endpoint = str_replace("{post}", $id, $endpoint);
@@ -102,7 +109,8 @@ class Guzzle {
 		return $response;
 	}
 
-	public function delete_post($id, $entity, $endpoint) {
+	public function delete_post($id, $entity) {
+		$endpoint = $this->endpoints['post'];
 		$port = $this->get_port($endpoint);
 		$endpoint = str_replace("{entity}", urlencode($entity), $endpoint);
 		$endpoint = str_replace("{post}", $id, $endpoint);
@@ -130,7 +138,8 @@ class Guzzle {
 		return $profile;
 	}
 
-	public function update_post($id, $entity, $new_post, $endpoint) {
+	public function update_post($id, $entity, $new_post) {
+		$endpoint = $this->endpoints['post'];
 		$endpoint = str_replace("{entity}", urlencode($entity), $endpoint);
 		$endpoint = str_replace("{post}", $id, $endpoint);
 		$port = $this->get_port($endpoint);

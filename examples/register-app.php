@@ -27,17 +27,9 @@ echo "<hr />";
 var_export($meta['post']['content']['servers'][0]['urls']);//'content->servers);
 echo "<hr />Oauth Endpoint: ";
 var_export($client->oauth_endpoint());
-echo "<hr />Post Feed Endpoint: ";
-var_export($client->post_feed_endpoint());
-echo "<hr />New Post Endpoint: ";
-var_export($client->new_post_endpoint());
 echo "<hr/> Profile: ";
 var_export($client->profile());
 echo "<hr />";
-var_export($client->endpoints());
-echo "<hr />";
-
-$_SESSION['endpoints'] = $client->endpoints();
 
 $app = new App($_GET['entity'], array());
 $app_post = file_get_contents('app.json');

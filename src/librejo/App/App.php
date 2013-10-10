@@ -8,7 +8,6 @@ class App {
 	protected $entityUri;
 	protected $name;
 	protected $url;
-	protected $types;
 	protected $redirect_uri;
 	protected $client_id;
 	protected $hawk_id;
@@ -16,6 +15,7 @@ class App {
 	protected $meta;
 	protected $Guzzle;
 	protected $client;
+	protected $app_post;
 
 	public function __construct($entityUri, $credentials) {
 		$this->Guzzle = new GuzzleClient\Guzzle($entityUri, $credentials);
@@ -26,12 +26,13 @@ class App {
 		$this->meta = $meta;
 	}
 
-	public function new_app($entityUri, $name, $url, array $types, $redirect_uri) {
+	public function new_app($entityUri, $post) {
+		$this->app_post = $post;
+		$app_array = json_decode($post, true);
 		$this->entityUri = $entityUri;
-		$this->name = $name;
-		$this->url = $url;
-		$this->types = $types;
-		$this->redirect_uri = $redirect_uri;
+		$this->name = $app_array['content']['name'];
+		$this->url = $app_array['content']['url'];
+		$this->redirect_uri = $app_array['content']['redirect_uri'];
 	}
 
 	// Returns the name of the registered app
@@ -42,26 +43,11 @@ class App {
 
 	public function register() {
 		// Creating the app information JSON
-		$app_array = array(
-			'type' => 'https://tent.io/types/app/v0#',
-			'content' => array(
-				'name' => $this->name,
-				'url' => $this->url,
-				'types' => array(
-					'write' => array('https://tent.io/types/status/v0')
-				),
-				'scopes' => array('permissions'),
-				'redirect_uri' => $this->redirect_uri,
-				),
-			'permissions' => array(
-				'public' => false
-			),
-		);
-		$app = json_encode($app_array, JSON_UNESCAPED_SLASHES); // JSON-encoding the app post
+		$app_json = $this->app_post;
 		$meta = $this->meta;
 		$client = $this->client;
 		$register = $this->Guzzle;
-		$post_app = $register->register_app($app, $client->new_post_endpoint());
+		$post_app = $register->register_app($app_json, $client->new_post_endpoint());
 		$this->client_id = $post_app['App']['post']['id'];
 		$this->hawk_id = $post_app['Credentials']['post']['id'];
 		$this->hawk_key = $post_app['Credentials']['post']['content']['hawk_key'];

@@ -35,7 +35,19 @@ class Guzzle {
 
 	public function register_app($app, $post_endpoint) {
 		$request = $this->Guzzle->post($post_endpoint, array('Content-Type' => 'application/vnd.tent.post.v0+json; type="https://tent.io/types/app/v0#"'), $app);
-		$response = $request->send();
+		try {
+    		$response = $request->send();
+		} 		
+		catch (\Guzzle\Http\Exception\BadResponseException $e) {
+    		echo '<p>Uh oh! ' . $e->getMessage().'</p>';
+    		echo '<p>HTTP request URL: ' . $e->getRequest()->getUrl() . "</p>";
+    		echo '<p>HTTP request: ' . $e->getRequest() . "</p>";
+    		echo '<p>HTTP response status: ' . $e->getResponse()->getStatusCode() . "</p>";
+    		echo '<p>HTTP response: ' . $e->getResponse() . "</p>";
+    		echo '<p>JSON: ';
+    		var_export($e->getResponse()->json());
+    		echo "</p>";
+		}
 		$link = $response->getHeader('link')->raw();
 		$link = preg_replace('/<(.*)>.*/', '$1', $link);
 		$get = $this->Guzzle->get($link)->send();

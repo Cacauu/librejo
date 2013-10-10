@@ -40,14 +40,10 @@ echo "<hr />";
 $_SESSION['endpoints'] = $client->endpoints();
 
 $app = new App($_GET['entity'], array());
-$create_app = $app->new_app($entity, 
-	'Librejo Client', 
-	'http://cacauu.de/librejo/client', 
-	array(
-		'read' => '',
-		'write' => 'https://tent.io/types/status/v0'),
-	'http://localhost:8888/librejo/examples/redirect.php'
-	);
+$app_post = file_get_contents('app.json');
+var_export($app_post);
+echo "<hr/>";
+$create_app = $app->new_app($entity, $app_post);
 var_export($app->register());
 echo "<hr />";
 

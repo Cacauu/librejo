@@ -1,0 +1,22 @@
+{
+  "type": "https://tent.io/types/app/v0#",
+  "content": {
+    "name": "Librejo Client",
+    "url": "https://cacauu.de/librejo",
+    "types": {
+      "read": [
+        "https://tent.io/types/status/v0"
+      ],
+      "write": [
+        "https://tent.io/types/status/v0"
+      ]
+    },
+    "scopes": [
+      "permissions"
+    ],
+    "redirect_uri": "http://localhost:8888/librejo/examples/redirect.php"
+  },
+  "permissions": {
+    "public": false
+  }
+}

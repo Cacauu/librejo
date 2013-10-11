@@ -101,4 +101,9 @@ class App {
 	public function update_post($id, $entity, $new_post) {
 		$updated = $this->Guzzle->update_post($id, $entity, $new_post);
 	}
+
+	public function generate_state($string) {
+		$state = uniqid($string, true);
+		return $state;
+	}
 }

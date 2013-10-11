@@ -24,11 +24,7 @@ As Librejo is still work in progress, there is no documentation or API reference
 
 ##To Do
 
-* Add state to authentication
-
 * Use [dflydev-hawk](https://github.com/dflydev/dflydev-hawk) for authentication part in requests
-
-* Update Post
 
 ##Apps
 

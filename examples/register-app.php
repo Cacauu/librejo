@@ -49,5 +49,8 @@ $_SESSION['hawk_id'] = $app->hawk_id();
 echo "<p>Hawk Key: ".$app->hawk_key()."</p>";
 $_SESSION['hawk_key'] = $app->hawk_key();
 echo "<hr />";
-echo "<a href='".$client->oauth_endpoint()."?client_id=".$app->client_id()."'>Click here to authenticate ".$app->name()."</a>";
+$state = $app->generate_state('Librejo_');
+$_SESSION['state'] = $state; // This is to be validated somewhere on the redirect page
+
+echo "<a href='".$client->oauth_endpoint()."?client_id=".$app->client_id()."&state=".$state."'>Click here to authenticate ".$app->name()."</a>";
 ?>

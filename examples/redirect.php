@@ -8,17 +8,19 @@ use Librejo\App\App;
 use Librejo\Client;
 use Librejo\Entity\Entity;
 
-if (isset($_GET['error'])) {
+if (isset($_GET['error']) OR $_GET['state'] != $_SESSION['state']) {
 	echo "<p>An error occured, please try again</p>";
 	echo "<p>Error: ".$_GET['error']."</p>";
 }
-else {
+elseif ($_SESSION['state'] == $_GET['state']){
 	$credentials = array(
 		'entity' => $_SESSION['entity'], 
 		'client_id' => $_SESSION['client_id'],
 		'hawk_id' => $_SESSION['hawk_id'],
 		'hawk_key' => $_SESSION['hawk_key']
 	);
+	echo "<p>State: Correct</p>";
+	unset($_SESSION['state']);
 	echo "<p>Code: ".$_GET['code']."</p>";
 	$app = new App($_SESSION['entity'], $credentials);
 	$oauth = $app->oauth($_GET['code']);
@@ -31,4 +33,7 @@ else {
 	echo "<p>Access Token: ".$_SESSION['access_token']."</p>"; ?>
 	<p><a href="posts.php">Read and create statuses</a></p>
 <?php }
+else {
+	echo "<p>Something is wrong here...</p>";
+}
 ?>

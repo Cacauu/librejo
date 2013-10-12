@@ -75,10 +75,10 @@ elseif (isset($_GET['send_update'])) {
 		<p>Bio: <?php echo $profile['bio']; ?></p>
 		<p>Website: <?php echo $profile['website']; ?></p>
 
-	<h2>Your statuses:</h2>
+	<h2>Latest statuses:</h2>
 	<div id="status">
 		<?php
-			$statuses = $app->get_posts('https://tent.io/types/status/v0#');
+			$statuses = $app->get_posts('?types=https%3A%2F%2Ftent.io%2Ftypes%2Fstatus%2Fv0%23&limit=5');
 			foreach ($statuses['posts'] as $status) { ?>
 				<p><?php echo $status['content']['text']; ?> - <?php echo $status['entity']; ?></p>
 			<?php } ?>

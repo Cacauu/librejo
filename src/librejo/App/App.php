@@ -78,8 +78,8 @@ class App {
 		return $post;	
 	}
 
-	public function get_posts($type) {
-		$posts = $this->Guzzle->get_posts($type);
+	public function get_posts($fragment) {
+		$posts = $this->Guzzle->get_posts($fragment);
 		return $posts;
 	}
 

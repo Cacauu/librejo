@@ -87,15 +87,24 @@ class Guzzle {
 		return $response;
 	}
 
-	public function get_posts($type) {
+	public function get_posts($fragment) {
 		$endpoint = $this->endpoints['posts_feed'];
 		$port = $this->get_port($endpoint);
-		$type = urlencode($type);
-		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'].'?types='.$type, parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
+		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'].$fragment, parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
 		$client = $this->Guzzle;
-		$request = $client->get($endpoint.'?types='.$type, array('Authorization' => $header, 'Accept' => 'application/json'));
-		$response = $request->send()->json();
-		return $response;
+		$request = $client->get($endpoint.$fragment, array('Authorization' => $header, 'Accept' => 'application/json'));
+		try {
+    		$response = $request->send();
+		} catch (\Guzzle\Http\Exception\BadResponseException $e) {
+    		echo '<p>Uh oh! ' . $e->getMessage().'</p>';
+    		echo '<p>HTTP request URL: ' . $e->getRequest()->getUrl() . "</p>";
+    		echo '<p>HTTP request: ' . $e->getRequest() . "</p>";
+    		echo '<p>HTTP response status: ' . $e->getResponse()->getStatusCode() . "</p>";
+    		echo '<p>HTTP response: ' . $e->getResponse() . "</p>";
+    		echo '<p>JSON: ' . $e->getResponse()->json() . "</p>";
+		}
+		//$response = $request->send()->json();
+		return $response->json();
 	}
 
 	public function get_single_post($id, $entity) {

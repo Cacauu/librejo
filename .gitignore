@@ -2,3 +2,6 @@ composer.lock
 composer.phar
 .DS_Store
 vendor/
+/librejo.sublime-project
+
+/librejo.sublime-workspace

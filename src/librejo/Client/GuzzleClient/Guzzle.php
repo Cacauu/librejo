@@ -68,7 +68,8 @@ class Guzzle {
 		$post = json_encode($post, JSON_UNESCAPED_SLASHES);
 		$client = $this->Guzzle;
 		$request = $client->post($endpoint, array('Authorization' => $header, 'Content-Type' => 'application/json', 'Accept' => 'application/json'), $post);
-		$response = $request->send()->json();
+		$response = $this->request_handler($request);
+		$response = $response->json();
 		$reponse = array('access_token' => $response['access_token'], 'hawk_key' => $response['hawk_key']);
 		unset($response['hawk_algorithm']);
 		unset($response['token_type']);
@@ -83,7 +84,8 @@ class Guzzle {
 		$header = $this->auth->generate_header('hawk.1.header', 'POST', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
 		$client = $this->Guzzle;
 		$request = $client->post($endpoint, array('Authorization' => $header, 'Content-Type' => 'application/vnd.tent.post.v0+json; type="'.$type.'"', 'Accept' => 'application/json'), $post);
-		$response = $request->send()->json();
+		$response = $this->request_handler($request);
+		$response = $response->json();
 		return $response;
 	}
 
@@ -93,17 +95,7 @@ class Guzzle {
 		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'].$fragment, parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
 		$client = $this->Guzzle;
 		$request = $client->get($endpoint.$fragment, array('Authorization' => $header, 'Accept' => 'application/json'));
-		try {
-    		$response = $request->send();
-		} catch (\Guzzle\Http\Exception\BadResponseException $e) {
-    		echo '<p>Uh oh! ' . $e->getMessage().'</p>';
-    		echo '<p>HTTP request URL: ' . $e->getRequest()->getUrl() . "</p>";
-    		echo '<p>HTTP request: ' . $e->getRequest() . "</p>";
-    		echo '<p>HTTP response status: ' . $e->getResponse()->getStatusCode() . "</p>";
-    		echo '<p>HTTP response: ' . $e->getResponse() . "</p>";
-    		echo '<p>JSON: ' . $e->getResponse()->json() . "</p>";
-		}
-		//$response = $request->send()->json();
+		$response = $this->request_handler($request);
 		return $response->json();
 	}
 
@@ -114,7 +106,8 @@ class Guzzle {
 		$endpoint = str_replace("{post}", $id, $endpoint);
 		$header = $this->auth->generate_header('hawk.1.header', 'GET', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
 		$request = $this->Guzzle->get($endpoint, array('Authorization' => $header, 'Accept' => 'application/vnd.tent.post.v0+json'));
-		$response = $request->send()->json();
+		$response = $this->request_handler($request);
+		$response = $response->json();
 		return $response;
 	}
 
@@ -125,7 +118,8 @@ class Guzzle {
 		$endpoint = str_replace("{post}", $id, $endpoint);
 		$header = $this->auth->generate_header('hawk.1.header', 'DELETE', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
 		$request = $this->Guzzle->delete($endpoint, array('Authorization' => $header, 'Content-Type' => 'application/vnd.tent.post.v0+json;'));
-		$response = $request->send()->json();
+		$response = $this->request_handler($request);
+		$response = $response->json();
 		return $response;
 	}
 
@@ -156,7 +150,7 @@ class Guzzle {
 		$new_post = json_encode($new_post, JSON_UNESCAPED_SLASHES);
 		$header = $this->auth->generate_header('hawk.1.header', 'PUT', parse_url($endpoint)['path'], parse_url($endpoint)['host'], $port, $this->credentials['hawk_key'], $this->credentials['hawk_id'], $this->credentials['client_id']);
 		$request = $this->Guzzle->put($endpoint, array('Authorization' => $header, 'Content-Type' => 'application/vnd.tent.post.v0+json; type="'.$type.'"'), $new_post);
-		$response = $request->send();
+		$response = $this->request_handler($request);
 		return $response;
 	}
 
@@ -169,5 +163,23 @@ class Guzzle {
 			$port = 443;
 		}
 		return $port;
+	}
+
+	public function request_handler($request) {
+		try {
+    		$response = $request->send();
+		} 
+		catch (\Guzzle\Http\Exception\BadResponseException $e) {
+    		echo '<p><strong>Error!</strong> '.$e->getMessage().'</p>';
+    		echo '<p>HTTP request URL: '.$e->getRequest()->getUrl()."</p>";
+    		echo '<p>HTTP request: '.$e->getRequest()."</p>";
+    		echo '<p>HTTP response status: '.$e->getResponse()->getStatusCode()."</p>";
+    		echo '<p>HTTP response: '.$e->getResponse()."</p>";
+    		echo '<p>JSON: '; 
+    		var_export($e->getResponse()->json()['error']);
+    		echo "</p>";
+    		echo '<p>Your Mac: '.$this->auth->raw_data().'</p>'; //Provides the MAC string used in the request for easier debugging
+		}
+		return $response;
 	}
 }

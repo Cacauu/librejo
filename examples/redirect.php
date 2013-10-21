@@ -28,8 +28,7 @@ elseif ($_SESSION['state'] == $_GET['state']){
 	$_SESSION['hawk_id'] = $oauth['access_token'];
 	echo "<p>App ID: ".$_SESSION['client_id']."</p>";
 	echo "<p>Hawk ID: ".$_SESSION['hawk_id']."</p>";
-	echo "<p>Hawk Key: ".$_SESSION['hawk_key']."</p>";
-	echo "<p>Access Token: ".$_SESSION['access_token']."</p>"; ?>
+	echo "<p>Hawk Key: ".$_SESSION['hawk_key']."</p>"; ?>
 	<p><a href="posts.php">Read and create statuses</a></p>
 <?php }
 else {

@@ -5,7 +5,6 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use Librejo\App\App;
 use Librejo\Client;
-use Librejo\Entity\Entity;
 
 $client = new Client\Client;
 

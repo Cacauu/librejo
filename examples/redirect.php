@@ -6,7 +6,6 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use Librejo\App\App;
 use Librejo\Client;
-use Librejo\Entity\Entity;
 
 if (isset($_GET['error']) OR $_GET['state'] != $_SESSION['state']) {
 	echo "<p>An error occured, please try again</p>";

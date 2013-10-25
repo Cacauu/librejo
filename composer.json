@@ -1,4 +1,5 @@
 {
+	"name" : "librejo/librejo",
 	"autoload": {
         "psr-0": { "Librejo": "src" }
     },

@@ -12,7 +12,7 @@ if (isset($_GET['entity'])) {
 	$entity = $_GET['entity'];
 }
 else {
-	$entity = 'https://tent.tent.is';
+	$entity = 'https://cacauu.cupcake.is';
 }
 // Saving the entity as a session variable as it is needed later
 $_SESSION['entity'] = $entity;

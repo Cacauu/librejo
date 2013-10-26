@@ -20,7 +20,7 @@ class App {
 	public function __construct($entityUri, $credentials) {
 		$this->Guzzle = new GuzzleClient\Guzzle($entityUri, $credentials);
 		$this->entityUri = $entityUri;
-		$client = new Client\Client;
+		$client = new Client\Client($entityUri);
 		$this->client = $client;
 		$meta = $client->discover($entityUri);
 		$this->meta = $meta;

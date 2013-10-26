@@ -13,15 +13,18 @@ class Client {
 	protected $oauth_endpoint;
 	protected $profile;
 
-	//Function returning the meta post of an entity
-	public function discover($entityUri) {
+	public function __construct($entityUri) {
 		$Guzzle = new GuzzleClient\Guzzle($entityUri, array());
 		$meta = $Guzzle->discover();
 		$this->meta = $meta;
 		$this->oauth_endpoint = $meta['post']['content']['servers'][0]['urls']['oauth_auth'];
 		$this->new_post_endpoint = $meta['post']['content']['servers'][0]['urls']['new_post'];
 		$this->profile = $meta['post']['content']['profile'];
-		return $meta;
+	}
+
+	//Function returning the meta post of an entity
+	public function discover($entityUri) {
+		return $this->meta;
 	}
 
 	public function meta() {

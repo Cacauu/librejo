@@ -6,14 +6,15 @@ require_once __DIR__.'/../vendor/autoload.php';
 use Librejo\App\App;
 use Librejo\Client;
 
-$client = new Client\Client;
-
 if (isset($_GET['entity'])) {
 	$entity = $_GET['entity'];
 }
 else {
 	$entity = 'https://cacauu.cupcake.is';
 }
+
+$client = new Client\Client($entity);
+
 // Saving the entity as a session variable as it is needed later
 $_SESSION['entity'] = $entity;
 

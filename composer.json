@@ -1,5 +1,6 @@
 {
 	"name" : "librejo/librejo",
+	"description" : "Librejo is PHP library for the Tent API",
 	"autoload": {
         "psr-0": { "Librejo": "src" }
     },
